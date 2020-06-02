@@ -32,6 +32,7 @@
 en:
   hello: "Hello world"
   services:
+    metadata_link: "View record in "
     metadata: "IUCAT"
     remote_metadata:
       invalid_identifier: "The provided Source Metadata ID value was saved, but not used for remote metadata lookup as it was did not pass validation.  "

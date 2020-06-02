@@ -3,5 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Hyrax::BibRecordPresenter do
-  # "Add your tests here"
+  subject { described_class.new(double, double) }
+
+  include_examples "presents remote metadata" do
+    let(:presenter) { subject }
+  end
 end

@@ -3,6 +3,7 @@
 module Hyrax
   class PagedResourcePresenter < Hyrax::WorkShowPresenter
     include ESSI::PresentsOCR
+    include ESSI::PresentsRemoteMetadata
     include ESSI::PresentsStructure
     delegate :series, :viewing_direction, :viewing_hint,
              to: :solr_document
