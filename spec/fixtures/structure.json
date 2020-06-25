@@ -1,1 +1,29 @@
-"{:label=>'Logical', :nodes=>[<ActionController::Parameters {'label'=>'Main', 'nodes'=>[{'proxy'=>'2227mp645'}]} permitted: false>]}"
+{
+   "label":"Logical",
+   "nodes":[
+      {
+         "label":"Main",
+         "nodes":[
+            {
+               "proxy":"2227mp645"
+            },
+            {
+               "label":"subsection",
+               "nodes":[
+                  {
+                     "proxy":"g445cd121"
+                  }
+               ]
+            },
+            {
+               "label":"New section",
+               "nodes":[
+                  {
+                     "proxy":"vm40xr56k"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
