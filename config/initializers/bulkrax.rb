@@ -32,7 +32,9 @@ Bulkrax.setup do |config|
   #     'Bulkrax::CsvEntry'  => 'MyIdentifierField'
   #   }
   # The default value for CSV is 'source_identifier'
-  # config.source_identifier_field_mapping = { }
+   config.source_identifier_field_mapping = {
+     'Bulkrax::MetsXmlEntry'  => 'OBJID'
+   }
 
   # Field_mapping for establishing a parent-child relationship (FROM parent TO child)
   # This can be a Collection to Work, or Work to Work relationship
@@ -75,7 +77,8 @@ Bulkrax.setup do |config|
           "title" => { from: ["title"] },
           #"resource_type" => { from: ["resource_type"], parsed: true },
           #"remote_files" => { from: ["thumbnail_url"], parsed: true }
-        }
+        },
+        "Bulkrax::MetsXmlParser" => {}
      }
 
   # Add to, or change existing mappings as follows
