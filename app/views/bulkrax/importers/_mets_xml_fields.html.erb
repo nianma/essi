@@ -1,4 +1,4 @@
-<div class='xml_fields'>
+<div class='mets_xml_fields'>
 
   <%# @todo improve on this implementation. 
     As it stands, it's a hostage to namespaces, 
@@ -41,7 +41,7 @@
         required: false %>
   <%= fi.input :override_rights_statement, as: :boolean, hint: 'If checked, always use the selected rights statment. If unchecked, use rights or rights_statement from the record and only use the provided value if dc:rights is blank.', input_html: { checked: (importer.parser_fields['override_rights_statement'] == "1") } %>
 
-  <h4>XML and files to Import:</h4>
+  <h4>METS XML and files to Import:</h4>
   <p>File upload and Cloud File upload MUST be a either a single XML file (for metadata only import) OR a Zip file containing the XML files and data files, each in a separate folder.</p>
   <p>The Server Path can point to a folder containing XML files and data files to import, or direct to the XML file itself.</p>
 

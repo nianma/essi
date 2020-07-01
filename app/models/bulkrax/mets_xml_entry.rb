@@ -54,6 +54,7 @@ module Bulkrax
       add_visibility
       add_rights_statement
       add_collections
+      add_logical_structure
       self.parsed_metadata['file'] = self.raw_metadata['file']
 
       add_local
@@ -66,6 +67,13 @@ module Bulkrax
       Bulkrax.field_mappings[self.importerexporter.parser_klass].map do |_k, v|
         v[:from]
       end.flatten.compact.uniq
+    end
+
+    def self.add_logical_structure
+      
+      # do magic stuff here
+      # This method will convert the logical structure into a ruby hash.
+      # Doing so should set parsed_metadata to the correct value for hyrax to ingest and create the manifest
     end
   end
 end
