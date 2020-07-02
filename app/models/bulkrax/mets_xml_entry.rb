@@ -19,7 +19,7 @@ module Bulkrax
       children = []
       xpath_for_source_id = ".//*[name()='#{source_identifier_field}']"
       return {
-        source_identifier: data.xpath(xpath_for_source_id).first.text,
+        source_identifier: data.xpath(xpath_for_source_id).attribute('OBJID').value, # need to pass objid into source_identifier_field
         data:
           data.to_xml(
             encoding: 'UTF-8',
@@ -33,11 +33,11 @@ module Bulkrax
 
     # def self.matcher_class; end
 
-    def record
+    def self.record
       @record ||= Nokogiri::XML(self.raw_metadata['data'], nil, 'UTF-8')
     end
 
-    def build_metadata
+    def self.build_metadata 
       raise StandardError, 'Record not found' if record.nil?
       raise StandardError, 'Missing source identifier' if self.raw_metadata['source_identifier'].blank?
       self.parsed_metadata = {}
@@ -63,7 +63,7 @@ module Bulkrax
     end
 
     # Grab the class from the real parser
-    def xml_elements
+    def self.xml_elements
       Bulkrax.field_mappings[self.importerexporter.parser_klass].map do |_k, v|
         v[:from]
       end.flatten.compact.uniq
