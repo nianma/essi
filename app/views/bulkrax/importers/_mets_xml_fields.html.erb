@@ -11,6 +11,11 @@
     input_html: { value: importer.parser_fields['record_element'] }
     %>
 
+  <%= fi.input :title, 
+    hint: 'Provide a title for this work',
+    input_html: { value: [importer.parser_fields['title']] }
+    %>
+
   <%= fi.input :import_type, 
 		collection: [
       ['Single Work per Metadata File', 'single'],

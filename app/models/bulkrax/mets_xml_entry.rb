@@ -39,8 +39,8 @@ module Bulkrax
     end
     
     def record
-      #@record ||= IuMetadata::METSRecord.new(source_identifier, raw_metadata['data'])
-      @record ||= Nokogiri::XML(self.raw_metadata['data'], nil, 'UTF-8')
+      @record ||= IuMetadata::METSRecord.new(source_identifier, raw_metadata['data'])
+      #@record ||= Nokogiri::XML(self.raw_metadata['data'], nil, 'UTF-8')
     end
 
     def build_metadata
@@ -48,18 +48,20 @@ module Bulkrax
       raise StandardError, 'Missing source identifier' if source_identifier.blank?
       self.parsed_metadata = {}
       self.parsed_metadata[Bulkrax.system_identifier_field] = [source_identifier]
-      #record.attributes.each do |k,v|
-      #  add_metadata(k, v) unless v.blank?
-      #end
-      xml_elements.each do |element_name|
-        elements = record.xpath("//*[name()='#{element_name}']")
-        next if elements.blank?
-        elements.each do |el|
-          el.children.map(&:content).each do |content|
-            add_metadata(element_name, content) unless content.blank?
-          end
-        end
+
+      record.attributes.each do |k,v|
+        add_metadata(k, v) unless v.blank?
       end
+      #xml_elements.each do |element_name|
+      #  elements = record.xpath("//*[name()='#{element_name}']")
+      #  next if elements.blank?
+      #  elements.each do |el|
+      #    el.children.map(&:content).each do |content|
+      #      add_metadata(element_name, content) unless content.blank?
+      #    end
+      #  end
+      #end
+      add_title
       add_visibility
       add_rights_statement
       #add_logical_structure
@@ -75,10 +77,14 @@ module Bulkrax
     end
 
     # Grab the class from the real parser
-    def xml_elements
-      Bulkrax.field_mappings[self.importerexporter.parser_klass].map do |_k, v|
-        v[:from]
-      end.flatten.compact.uniq
+    #def xml_elements
+    #  Bulkrax.field_mappings[self.importerexporter.parser_klass].map do |_k, v|
+    #    v[:from]
+    #  end.flatten.compact.uniq
+    #end
+
+    def add_title
+      self.parsed_metadata['title'] = [record.record_id] if self.parsed_metadata['title'].blank?
     end
   end
 end

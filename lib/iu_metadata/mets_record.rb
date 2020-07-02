@@ -9,9 +9,8 @@ module IuMetadata
     attr_reader :id, :source
 
     # local metadata
-    ATTRIBUTES = %i[
+    ATTRIBUTES = %w[
       identifier
-      replaces
       source_metadata_identifier
       viewing_direction
     ].freeze
@@ -21,12 +20,15 @@ module IuMetadata
     end
 
     def identifier
+      # not used in essi according to Nick
       ark_id
     end
 
-    def replaces
-      pudl_id
-    end
+    #def replaces
+    #  # from Princeton
+    #  # not used in essi according to Nick
+    #  pudl_id
+    #end
 
     def source_metadata_identifier
       bib_id

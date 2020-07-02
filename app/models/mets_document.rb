@@ -7,12 +7,16 @@ class METSDocument
     @mets = File.open(@source_file) { |f| Nokogiri::XML(f) }
   end
 
+  def record_id
+    @mets.xpath("/mets/@ID").text
+  end
+
   def ark_id
-    @mets.xpath("/mets:mets/@OBJID").to_s
+    @mets.xpath("/mets/@OBJID").text
   end
 
   def bib_id
-    @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href") \
+    @mets.xpath("/mets/dmdSec/mdRef/href") \
          .to_s.gsub(/.*\//, '')
   end
 
@@ -21,10 +25,16 @@ class METSDocument
                 "//mets:div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
   end
 
-  def pudl_id
-    @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID")
-         .first.content.gsub(/\.mets/, '')
-  end
+  #def pudl_id
+  #  # not used in essi according to Nick
+  #  @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID")
+  #       .first.content.gsub(/\.mets/, '')
+  #end
+
+  #def title
+  #  # default title is the ID
+  #  @mets.xpath("/mets/@ID").to_s
+  #end
 
   def thumbnail_path
     xp = "/mets:mets/mets:fileSec/mets:fileGrp[@USE='thumbnail']" \
@@ -37,7 +47,7 @@ class METSDocument
   end
 
   def right_to_left
-    @mets.xpath("/mets:mets/mets:structMap[@TYPE='Physical']/mets:div/@TYPE") \
+    @mets.xpath("/mets/structMap[@TYPE='Physical']/div/@TYPE") \
          .to_s.start_with? 'RTL'
   end
 

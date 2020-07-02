@@ -80,7 +80,6 @@ Bulkrax.setup do |config|
         },
         "Bulkrax::MetsXmlParser" => {
           "source_identifier" => { from: ["identifier"] },
-          "title" => { from: ["name"] }
         }
      }
 
