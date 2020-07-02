@@ -17,9 +17,10 @@ module Bulkrax
     def self.data_for_entry(data)
       collections = []
       children = []
-      xpath_for_source_id = ".//*[name()='#{source_identifier_field}']"
+      
+      source_identifier = data.attributes[source_identifier_field].text
       return {
-        source_identifier: data.xpath(xpath_for_source_id).first.text,
+        source_identifier: source_identifier,
         data:
           data.to_xml(
             encoding: 'UTF-8',
@@ -33,15 +34,23 @@ module Bulkrax
 
     # def self.matcher_class; end
 
+    def source_identifier
+      @source_identifier ||= self.raw_metadata['source_identifier']
+    end
+    
     def record
+      #@record ||= IuMetadata::METSRecord.new(source_identifier, raw_metadata['data'])
       @record ||= Nokogiri::XML(self.raw_metadata['data'], nil, 'UTF-8')
     end
 
     def build_metadata
       raise StandardError, 'Record not found' if record.nil?
-      raise StandardError, 'Missing source identifier' if self.raw_metadata['source_identifier'].blank?
+      raise StandardError, 'Missing source identifier' if source_identifier.blank?
       self.parsed_metadata = {}
-      self.parsed_metadata[Bulkrax.system_identifier_field] = [self.raw_metadata['source_identifier']]
+      self.parsed_metadata[Bulkrax.system_identifier_field] = [source_identifier]
+      #record.attributes.each do |k,v|
+      #  add_metadata(k, v) unless v.blank?
+      #end
       xml_elements.each do |element_name|
         elements = record.xpath("//*[name()='#{element_name}']")
         next if elements.blank?
@@ -53,9 +62,14 @@ module Bulkrax
       end
       add_visibility
       add_rights_statement
+      #add_logical_structure
       add_collections
-      self.parsed_metadata['file'] = self.raw_metadata['file']
+      # copy over 3 pumpkin files and try to get the above work. goal: create a work (default pagedresource)
+      #TODO: deal with files
+      #TODO: deal with structure
+      #self.parsed_metadata['file'] = self.raw_metadata['file']
 
+      byebug
       add_local
       raise StandardError, "title is required" if self.parsed_metadata['title'].blank?
       self.parsed_metadata
@@ -69,3 +83,4 @@ module Bulkrax
     end
   end
 end
+
