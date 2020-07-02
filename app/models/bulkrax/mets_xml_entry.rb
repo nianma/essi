@@ -69,7 +69,6 @@ module Bulkrax
       #TODO: deal with structure
       #self.parsed_metadata['file'] = self.raw_metadata['file']
 
-      byebug
       add_local
       raise StandardError, "title is required" if self.parsed_metadata['title'].blank?
       self.parsed_metadata
