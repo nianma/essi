@@ -84,7 +84,7 @@ module Bulkrax
     #end
 
     def add_title
-      self.parsed_metadata['title'] = [record.record_id] if self.parsed_metadata['title'].blank?
+      self.parsed_metadata['title'] = [parser.parser_fields['title']] || [record.record_id]
     end
   end
 end
