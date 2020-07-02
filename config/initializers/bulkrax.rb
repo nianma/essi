@@ -78,7 +78,10 @@ Bulkrax.setup do |config|
           #"resource_type" => { from: ["resource_type"], parsed: true },
           #"remote_files" => { from: ["thumbnail_url"], parsed: true }
         },
-        "Bulkrax::MetsXmlParser" => {}
+        "Bulkrax::MetsXmlParser" => {
+          "source_identifier" => { from: ["identifier"] },
+          "title" => { from: ["name"] }
+        }
      }
 
   # Add to, or change existing mappings as follows
