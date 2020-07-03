@@ -48,6 +48,7 @@ module Bulkrax
       raise StandardError, 'Missing source identifier' if source_identifier.blank?
       self.parsed_metadata = {}
       self.parsed_metadata[Bulkrax.system_identifier_field] = [source_identifier]
+      self.parsed_metadata['work_type'] = ['PagedResource']
 
       record.attributes.each do |k,v|
         add_metadata(k, v) unless v.blank?

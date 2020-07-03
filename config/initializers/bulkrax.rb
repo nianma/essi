@@ -80,6 +80,7 @@ Bulkrax.setup do |config|
         },
         "Bulkrax::MetsXmlParser" => {
           "source_identifier" => { from: ["identifier"] },
+          "work_type" => 'PagedResource'
         }
      }
 
