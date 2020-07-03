@@ -8,7 +8,7 @@ module Bulkrax
     let(:data) { described_class.read_data(path) }
 
     before do
-      Bulkrax.source_identifier_field_mapping = { 'Bulkrax::MetsXmlEntry' => 'mets' }
+      Bulkrax.source_identifier_field_mapping = { 'Bulkrax::MetsXmlEntry' => 'OBJID' }
     end
 
     describe 'class methods' do
@@ -83,7 +83,6 @@ module Bulkrax
     end
 
     xit '#add_logical_structure' do
-      # described_class.data_for_entry(data)
       # described_class.build_metadata
       logical_structure = described_class.parsed_metadata['logical_structure']
       expect(logical_structure['label']).to eq('VAC1741-U-00064')

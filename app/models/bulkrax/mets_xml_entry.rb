@@ -17,8 +17,8 @@ module Bulkrax
     def self.data_for_entry(data)
       collections = []
       children = []
-      
-      source_identifier = data.attributes[source_identifier_field].text
+      source_identifier = data.xpath("//*[@#{source_identifier_field}]").attr(source_identifier_field).value
+      # source_identifier = data.attributes[source_identifier_field]
       return {
         source_identifier: source_identifier,
         data:
