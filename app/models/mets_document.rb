@@ -21,8 +21,8 @@ class METSDocument
   end
 
   def collection_slugs
-    @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']" \
-                "//mets:div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
+    @mets.xpath("/mets/structMap[@TYPE='RelatedObjects']" \
+                "//div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
   end
 
   #def pudl_id
@@ -37,8 +37,8 @@ class METSDocument
   #end
 
   def thumbnail_path
-    xp = "/mets:mets/mets:fileSec/mets:fileGrp[@USE='thumbnail']" \
-    "/mets:file/mets:FLocat/@xlink:href"
+    xp = "/mets/fileSec/fileGrp[@USE='thumbnail']" \
+    "/file/FLocat/href"
     @mets.xpath(xp).to_s.gsub(/file:\/\//, '')
   end
 
@@ -69,15 +69,15 @@ class METSDocument
   end
 
   def files_for_volume(volume_id)
-    @mets.xpath("//mets:div[@ID='#{volume_id}']//mets:fptr/@FILEID") \
+    @mets.xpath("//div[@ID='#{volume_id}']//fptr/@FILEID") \
          .map do |file_id|
-      file_info(@mets.xpath("//mets:file[@ID='#{file_id.value}']"))
+      file_info(@mets.xpath("//file[@ID='#{file_id.value}']"))
     end
   end
 
   def files
-    @mets.xpath("/mets:mets/mets:fileSec/mets:fileGrp[@USE='masters']" \
-                "/mets:file").map do |f|
+    @mets.xpath("/mets/fileSec/fileGrp" \
+                "/file").map do |f|
       file_info(f)
     end
   end
@@ -87,13 +87,13 @@ class METSDocument
       id: file.xpath('@ID').to_s,
       checksum: file.xpath('@CHECKSUM').to_s,
       mime_type: file.xpath('@MIMETYPE').to_s,
-      path: file.xpath('mets:FLocat/@xlink:href').to_s.gsub(/file:\/\//, '')
+      path: file.xpath('FLocat/@href').to_s.gsub(/file:\/\//, '')
     }
   end
 
   def file_opts(file)
     return {} if
-      @mets.xpath("count(//mets:div/mets:fptr[@FILEID='#{file[:id]}'])") \
+      @mets.xpath("count(//div/fptr[@FILEID='#{file[:id]}'])") \
            .to_i.positive?
     { viewing_hint: 'non-paged' }
   end
@@ -107,8 +107,8 @@ class METSDocument
   private
 
     def volume_nodes
-      xp = "/mets:mets/mets:structMap[@TYPE='Physical']" \
-      "/mets:div[@TYPE='MultiVolumeSet']/mets:div"
+      xp = "/mets/structMap[@TYPE='Physical']" \
+      "/div[@TYPE='MultiVolumeSet']/div"
       @volume_nodes ||= @mets.xpath(xp)
     end
 end
