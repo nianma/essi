@@ -40,3 +40,5 @@ Hyrax::FileSetPresenter.include Extensions::Hyrax::FileSetPresenter::SourceMetad
 
 Hyrax::CurationConcern.actor_factory.insert Hyrax::Actors::TransactionalRequest, ESSI::Actors::PerformLaterActor
 Hyrax::CurationConcern.actor_factory.swap Hyrax::Actors::CreateWithRemoteFilesActor, ESSI::Actors::CreateWithRemoteFilesActor
+
+Hyrax::DerivativeService.services.unshift ESSI::FileSetOCRDerivativesService
