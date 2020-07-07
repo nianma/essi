@@ -16,7 +16,7 @@ class METSDocument
   end
 
   def bib_id
-    @mets.xpath("/mets/dmdSec/mdRef/href") \
+    @mets.xpath("/mets/dmdSec/mdRef/@href") \
          .to_s.gsub(/.*\//, '')
   end
 
@@ -38,7 +38,7 @@ class METSDocument
 
   def thumbnail_path
     xp = "/mets/fileSec/fileGrp[@USE='thumbnail']" \
-    "/file/FLocat/href"
+    "/file/FLocat/@href"
     @mets.xpath(xp).to_s.gsub(/file:\/\//, '')
   end
 
