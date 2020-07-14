@@ -1,6 +1,6 @@
 module MetsStructure
   def structure
-    structure_type('Logical')
+    structure_type('logical')
   end
 
   def structure_for_volume(volume_id)
@@ -9,8 +9,8 @@ module MetsStructure
   end
 
   def file_label(file_id)
-    struct = structure_map('Physical')
-    node = struct.xpath(".//fptr[@FILEID='#{file_id}']").first if struct
+    struct = structure_map('logical')
+    node = struct.xpath(".//mets:fptr[@FILEID='#{file_id}']").first if struct
     (label_from_hierarchy(node.parent) if node) ||
       label_from_related_objects(file_id)
   end
@@ -18,12 +18,12 @@ module MetsStructure
   private
 
     def structure_map(type)
-      @mets.xpath("/mets/structMap[@TYPE='#{type}']").first
+      @mets.xpath("/mets:mets/mets:structMap[@TYPE='#{type}']").first
     end
 
     def structure_type(type)
       return nil unless structure_map(type)
-      top = structure_map(type).xpath("div/div")
+      top = structure_map(type).xpath("mets:div/mets:div")
       return nil if top.blank?
       { nodes: structure_for_nodeset(top) }
     end
@@ -87,7 +87,7 @@ module MetsStructure
     end
 
     def label_from_related_objects(id)
-      @mets.xpath("/mets/structMap[@TYPE='RelatedObjects']" \
-                  "//div[fptr/@FILEID='#{id}']/@LABEL").to_s
+      @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']" \
+                  "//mets:div[mets:fptr/@FILEID='#{id}']/@LABEL").to_s
     end
 end

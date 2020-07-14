@@ -7,38 +7,28 @@ class METSDocument
     @mets = File.open(@source_file) { |f| Nokogiri::XML(f) }
   end
 
-  def record_id
-    @mets.xpath("/mets/@ID").text
-  end
-
   def ark_id
-    @mets.xpath("/mets/@OBJID").text
+    @mets.xpath("/mets:mets/@OBJID").to_s
   end
 
   def bib_id
-    @mets.xpath("/mets/dmdSec/mdRef/@href") \
+    @mets.xpath("/mets:mets/mets:dmdSec/mets:mdRef/@xlink:href") \
          .to_s.gsub(/.*\//, '')
   end
 
   def collection_slugs
-    @mets.xpath("/mets/structMap[@TYPE='RelatedObjects']" \
-                "//div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
+    @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']" \
+                "//mets:div[@TYPE='IsPartOf']/@CONTENTIDS").to_s
   end
 
-  #def pudl_id
-  #  # not used in essi according to Nick
-  #  @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID")
-  #       .first.content.gsub(/\.mets/, '')
-  #end
-
-  #def title
-  #  # default title is the ID
-  #  @mets.xpath("/mets/@ID").to_s
-  #end
+  def pudl_id
+    @mets.xpath("/mets:mets/mets:metsHdr/mets:metsDocumentID")
+         .first.content.gsub(/\.mets/, '')
+  end
 
   def thumbnail_path
-    xp = "/mets/fileSec/fileGrp[@USE='thumbnail']" \
-    "/file/FLocat/@href"
+    xp = "/mets:mets/mets:fileSec/mets:fileGrp[@USE='thumbnail']" \
+    "/mets:file/mets:FLocat/@xlink:href"
     @mets.xpath(xp).to_s.gsub(/file:\/\//, '')
   end
 
@@ -47,7 +37,7 @@ class METSDocument
   end
 
   def right_to_left
-    @mets.xpath("/mets/structMap[@TYPE='Physical']/div/@TYPE") \
+    @mets.xpath("/mets:mets/mets:structMap[@TYPE='logical']/mets:div/@TYPE") \
          .to_s.start_with? 'RTL'
   end
 
@@ -69,15 +59,15 @@ class METSDocument
   end
 
   def files_for_volume(volume_id)
-    @mets.xpath("//div[@ID='#{volume_id}']//fptr/@FILEID") \
+    @mets.xpath("//mets:div[@ID='#{volume_id}']//mets:fptr/@FILEID") \
          .map do |file_id|
-      file_info(@mets.xpath("//file[@ID='#{file_id.value}']"))
+      file_info(@mets.xpath("//mets:file[@ID='#{file_id.value}']"))
     end
   end
 
   def files
-    @mets.xpath("/mets/fileSec/fileGrp" \
-                "/file").map do |f|
+    @mets.xpath("/mets:mets/mets:fileSec/mets:fileGrp" \
+                "/mets:file").map do |f|
       file_info(f)
     end
   end
@@ -87,13 +77,13 @@ class METSDocument
       id: file.xpath('@ID').to_s,
       checksum: file.xpath('@CHECKSUM').to_s,
       mime_type: file.xpath('@MIMETYPE').to_s,
-      path: file.xpath('FLocat/@href').to_s.gsub(/file:\/\//, '')
+      url: file.xpath('mets:FLocat/@xlink:href').to_s.gsub(/file:\/\//, '')
     }
   end
 
   def file_opts(file)
     return {} if
-      @mets.xpath("count(//div/fptr[@FILEID='#{file[:id]}'])") \
+      @mets.xpath("count(//mets:div/mets:fptr[@FILEID='#{file[:id]}'])") \
            .to_i.positive?
     { viewing_hint: 'non-paged' }
   end
@@ -107,8 +97,8 @@ class METSDocument
   private
 
     def volume_nodes
-      xp = "/mets/structMap[@TYPE='Physical']" \
-      "/div[@TYPE='MultiVolumeSet']/div"
+      xp = "/mets:mets/mets:structMap[@TYPE='logical']" \
+      "/mets:div[@TYPE='MultiVolumeSet']/mets:div"
       @volume_nodes ||= @mets.xpath(xp)
     end
 end

@@ -11,7 +11,7 @@ module Bulkrax
     def self.read_data(path)
       # This doesn't cope with BOM sequences:
       # Nokogiri::XML(open(path), nil, 'UTF-8').remove_namespaces!
-      Nokogiri::XML(open(path)).remove_namespaces!
+      Nokogiri::XML(open(path))
     end
 
     def self.data_for_entry(data)
@@ -47,6 +47,7 @@ module Bulkrax
       raise StandardError, 'Record not found' if record.nil?
       raise StandardError, 'Missing source identifier' if source_identifier.blank?
       self.parsed_metadata = {}
+      self.parsed_metadata['admin_set_id'] = self.importerexporter.admin_set_id
       self.parsed_metadata[Bulkrax.system_identifier_field] = [source_identifier]
       self.parsed_metadata['work_type'] = ['PagedResource']
 
@@ -65,7 +66,8 @@ module Bulkrax
       add_title
       add_visibility
       add_rights_statement
-      #add_logical_structure
+      self.parsed_metadata['remote_files'] = record.files
+      self.parsed_metadata['structure'] = record.structure #add_logical_structure
       add_collections
       # copy over 3 pumpkin files and try to get the above work. goal: create a work (default pagedresource)
       #TODO: deal with files
