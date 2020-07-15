@@ -23,10 +23,6 @@ module IuMetadata
       ark_id
     end
 
-    #de replaces
-    #  pudl_id
-    #end
-
     def source_metadata_identifier
       bib_id
     end
@@ -61,8 +57,6 @@ module IuMetadata
           f[:file_opts] = file_opts(f)
           f[:attributes] ||= {}
           f[:attributes][:title] = [file_label(f[:id])]
-          #f[:attributes][:replaces] =
-          #  "#{pudl_id}/#{File.basename(f[:path], File.extname(f[:path]))}"
         end
         file_hash_array
       end
