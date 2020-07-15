@@ -32,15 +32,12 @@ module Bulkrax
       }
     end
 
-    # def self.matcher_class; end
-
     def source_identifier
       @source_identifier ||= self.raw_metadata['source_identifier']
     end
     
     def record
       @record ||= IuMetadata::METSRecord.new(source_identifier, raw_metadata['data'])
-      #@record ||= Nokogiri::XML(self.raw_metadata['data'], nil, 'UTF-8')
     end
 
     def build_metadata
@@ -54,37 +51,16 @@ module Bulkrax
       record.attributes.each do |k,v|
         add_metadata(k, v) unless v.blank?
       end
-      #xml_elements.each do |element_name|
-      #  elements = record.xpath("//*[name()='#{element_name}']")
-      #  next if elements.blank?
-      #  elements.each do |el|
-      #    el.children.map(&:content).each do |content|
-      #      add_metadata(element_name, content) unless content.blank?
-      #    end
-      #  end
-      #end
       add_title
       add_visibility
       add_rights_statement
       self.parsed_metadata['remote_files'] = record.files
       self.parsed_metadata['structure'] = record.structure #add_logical_structure
       add_collections
-      # copy over 3 pumpkin files and try to get the above work. goal: create a work (default pagedresource)
-      #TODO: deal with files
-      #TODO: deal with structure
-      #self.parsed_metadata['file'] = self.raw_metadata['file']
-
       add_local
       raise StandardError, "title is required" if self.parsed_metadata['title'].blank?
       self.parsed_metadata
     end
-
-    # Grab the class from the real parser
-    #def xml_elements
-    #  Bulkrax.field_mappings[self.importerexporter.parser_klass].map do |_k, v|
-    #    v[:from]
-    #  end.flatten.compact.uniq
-    #end
 
     def add_title
       self.parsed_metadata['title'] = [parser.parser_fields['title']] || [record.record_id]

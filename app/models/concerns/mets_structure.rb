@@ -49,7 +49,7 @@ module MetsStructure
           child_nodes << structure_recurse(child)
         end
       end
-      { label: node['LABEL'], nodes: child_nodes }
+      { label: node['FILEID'], nodes: child_nodes }
     end
 
     def section(node)
@@ -68,11 +68,11 @@ module MetsStructure
     end
 
     def label_from_hierarchy(node)
-      return nil unless node['LABEL']
+      return nil unless node['FILEID']
       current = node
-      label = current['LABEL']
-      while current.parent['LABEL'] && in_scope(current.parent)
-        label = "#{current.parent['LABEL']}. #{label}"
+      label = current['FILEID']
+      while current.parent['FILEID'] && in_scope(current.parent)
+        label = "#{current.parent['FILEID']}. #{label}"
         current = current.parent
       end
       label
@@ -88,6 +88,6 @@ module MetsStructure
 
     def label_from_related_objects(id)
       @mets.xpath("/mets:mets/mets:structMap[@TYPE='RelatedObjects']" \
-                  "//mets:div[mets:fptr/@FILEID='#{id}']/@LABEL").to_s
+                  "//mets:div[mets:fptr/@FILEID='#{id}']/@FILEID").to_s
     end
 end
