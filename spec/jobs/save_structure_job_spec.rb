@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'rails_helper'
 
 describe SaveStructureJob do # rubocop:disable Metrics/BlockLength
-  let(:paged_resource) { FactoryBot.create(:paged_resource_with_one_image) }
+  let(:paged_resource) { create(:paged_resource_with_one_image) }
   let(:structure)      { build_structure }
 
   describe '#perform' do
@@ -14,7 +14,7 @@ describe SaveStructureJob do # rubocop:disable Metrics/BlockLength
       described_class.perform_now(paged_resource, structure)
 
       expect(paged_resource.logical_order.order).to_not be_empty
-      expect(paged_resource.logical_order.order['label']).to eq('Logical')
+      expect(paged_resource.logical_order.order['label']).to eq('logical')
       expect(paged_resource.logical_order.order.dig('nodes').first.dig('label'))
         .to eq('Main')
       expect(paged_resource.logical_order.order.to_s)
@@ -24,7 +24,7 @@ describe SaveStructureJob do # rubocop:disable Metrics/BlockLength
 
   def build_structure # rubocop:disable Metrics/MethodLength
     {
-      'label': 'Logical',
+      'label': 'logical',
       'nodes': [
         {
           'label': 'Main',

@@ -55,7 +55,7 @@ class METSDocument
     volume_node = volume_nodes.find do |vol|
       vol.attribute("ID").value == volume_id
     end
-    return volume_node.attribute("LABEL").value if volume_node
+    return volume_node.attribute("FILEID").value if volume_node
   end
 
   def files_for_volume(volume_id)
@@ -77,7 +77,7 @@ class METSDocument
       id: file.xpath('@ID').to_s,
       checksum: file.xpath('@CHECKSUM').to_s,
       mime_type: file.xpath('@MIMETYPE').to_s,
-      url: file.xpath('mets:FLocat/@xlink:href').to_s.gsub(/file:\/\//, '')
+      url: final_url(file)
     }
   end
 
@@ -100,5 +100,16 @@ class METSDocument
       xp = "/mets:mets/mets:structMap[@TYPE='logical']" \
       "/mets:div[@TYPE='MultiVolumeSet']/mets:div"
       @volume_nodes ||= @mets.xpath(xp)
+    end
+
+    def final_url(file)
+      url = file.xpath('mets:FLocat/@xlink:href').to_s.gsub(/file:\/\//, '')
+      #return unless url.present?
+
+      fl = if url.present?
+             FinalRedirectUrl.final_redirect_url(url)
+           end
+
+      fl.present? ? fl : url
     end
 end
