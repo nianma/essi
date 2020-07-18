@@ -77,7 +77,8 @@ class METSDocument
       id: file.xpath('@ID').to_s,
       checksum: file.xpath('@CHECKSUM').to_s,
       mime_type: file.xpath('@MIMETYPE').to_s,
-      url: final_url(file)
+      url: final_url(file),
+      file_name: file.xpath('@ID').to_s
     }
   end
 
