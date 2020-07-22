@@ -25,7 +25,7 @@ module MetsStructure
       return nil unless structure_map(type)
       top = structure_map(type).xpath("mets:div/mets:div")
       return nil if top.blank?
-      { nodes: structure_for_nodeset(top) }
+      { label: 'Logical', nodes: structure_for_nodeset(top) }
     end
 
     def structure_for_nodeset(nodeset)
@@ -38,6 +38,7 @@ module MetsStructure
 
     def structure_recurse(node)
       children = node.element_children
+      return single_file_object(node) if children.blank? && node.name == 'fptr'
       return single_file_object(children.first) if !section(node) &&
                                                    single_file(children)
 
@@ -49,11 +50,15 @@ module MetsStructure
           child_nodes << structure_recurse(child)
         end
       end
-      { label: node['FILEID'], nodes: child_nodes }
+      node_id = node["FILEID"]
+      node_id = node['ID'] if node_id.blank?
+      node_id = "#{node["TYPE"]} #{node['ORDER']}" if node_id.blank? &&
+                                                      node['TYPE'].present?
+      { label: node_id, nodes: child_nodes }
     end
 
     def section(node)
-      node.attributes["TYPE"].try(:value) == "Section"
+      node.attributes["TYPE"].try(:value) == "archivalitem"
     end
 
     def single_file(nodeset)
@@ -64,6 +69,7 @@ module MetsStructure
       id = node['FILEID']
       label = label_from_hierarchy(node.parent) ||
               label_from_related_objects(id)
+      label = nil if label.blank?
       { label: label, proxy: id }
     end
 

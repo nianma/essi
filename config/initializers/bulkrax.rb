@@ -96,18 +96,3 @@ Bulkrax.setup do |config|
   # config.reserved_properties += ['my_field']
 end
 
-# Override actor selection to skip PerformLater actor as we are already in the background.
-Bulkrax::ObjectFactory.class_eval do
-  def work_actor
-    actor = Hyrax::CurationConcern.actor
-    while(actor.class == ESSI::Actors::PerformLaterActor) do
-      actor = actor.next_actor
-    end
-    actor
-  end
-
-  # Regardless of what the Parser gives us, these are the properties we are prepared to accept.
-  def permitted_attributes
-    klass.properties.keys.map(&:to_sym) + %i[id structure edit_users edit_groups read_groups visibility work_members_attributes]
-  end
-end
