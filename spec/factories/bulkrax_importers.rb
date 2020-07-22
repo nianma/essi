@@ -1,104 +1,5 @@
-# frozen_string_literal: true
-
+# We use modify instead of define because the actual factory is defined in hyrax/spec/factories
 FactoryBot.define do
-  factory :bulkrax_importer, class: 'Bulkrax::Importer' do
-    name { "A.N. Import" }
-    admin_set_id { "MyString" }
-    user { FactoryBot.build(:admin) }
-    frequency { "PT0S" }
-    parser_klass { "Bulkrax::OaiDcParser" }
-    limit { 10 }
-    parser_fields { {} }
-    field_mapping { [{}] }
-  end
-
-  factory :bulkrax_importer_oai, class: 'Bulkrax::Importer' do
-    name { 'Oai Collection' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::OaiDcParser' }
-    limit { 10 }
-    parser_fields do
-      {
-        'base_url' => 'http://commons.ptsem.edu/api/oai-pmh',
-        'metadata_prefix' => 'oai_dc'
-      }
-    end
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_csv, class: 'Bulkrax::Importer' do
-    name { 'CSV Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::CsvParser' }
-    limit { 10 }
-    parser_fields { { 'import_file_path' => 'spec/fixtures/csv/good.csv' } }
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_csv_complex, class: 'Bulkrax::Importer' do
-    name { 'CSV Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::CsvParser' }
-    limit { 10 }
-    parser_fields { { 'import_file_path' => 'spec/fixtures/csv/complex.csv' } }
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_bagit, class: 'Bulkrax::Importer' do
-    name { 'Bagit Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::BagitParser' }
-    limit { 10 }
-    parser_fields { {} }
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_csv_bad, class: 'Bulkrax::Importer' do
-    name { 'CSV Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::CsvParser' }
-    limit { 10 }
-    parser_fields { { 'import_file_path' => 'spec/fixtures/csv/bad.csv' } }
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_csv_failed, class: 'Bulkrax::Importer' do
-    name { 'CSV Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::CsvParser' }
-    limit { 10 }
-    parser_fields { { 'import_file_path' => 'spec/fixtures/csv/failed.csv' } }
-    field_mapping { {} }
-  end
-
-  factory :bulkrax_importer_xml, class: 'Bulkrax::Importer' do
-    name { 'XML Import' }
-    admin_set_id { 'MyString' }
-    user { FactoryBot.build(:admin) }
-    frequency { 'PT0S' }
-    parser_klass { 'Bulkrax::XmlParser' }
-    limit { 10 }
-    parser_fields { { 'import_file_path' => 'spec/fixtures/xml/good.xml' } }
-    field_mapping do
-      {
-        'title': { from: ['TitleLargerEntity'] },
-        'abstract': { from: ['Abstract'] }
-      }
-    end
-  end
-
   factory :bulkrax_importer_mets_xml, class: 'Bulkrax::Importer' do
     name { 'METS XML Import' }
     admin_set_id { 'MyString' }
@@ -109,7 +10,8 @@ FactoryBot.define do
     parser_fields { { 'import_file_path' => 'spec/fixtures/xml/mets.xml' } }
     field_mapping do
       {
-        'title': { from: ['ID'] }
+        "source_identifier" => { from: ["identifier"] },
+        "work_type" => 'PagedResource'
       }
     end
   end

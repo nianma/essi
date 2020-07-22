@@ -71,7 +71,6 @@ module Bulkrax
     # 2+ years later, still open!
     def create
       attrs = create_attributes
-      debugger
 
       @object = klass.new
       object.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
