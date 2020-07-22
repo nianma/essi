@@ -10,7 +10,6 @@ module Bulkrax
       let(:entry) { create(:bulkrax_entry, importerexporter: importer) }
 
       before do
-        Bulkrax.source_identifier_field_mapping = { 'Bulkrax::MetsXmlEntry' => 'DrisUnique' }
         Bulkrax.default_work_type = 'Work'
         Bulkrax.source_identifier_field_mapping = { 'Bulkrax::MetsXmlEntry' => 'OBJID' }
         Bulkrax.field_mappings['Bulkrax::MetsXmlParser'] = {
