@@ -96,6 +96,7 @@ gem 'i18n-js'
 gem 'bagit'
 gem 'validatable'
 gem 'prawn'
+gem 'final_redirect_url'
 
 # Bulk Import / Export
 #TODO: N8 specific - use local for dev; use github for test/staging
