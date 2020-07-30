@@ -11,10 +11,10 @@ module Bulkrax
       Bulkrax.source_identifier_field_mapping = { 'Bulkrax::MetsXmlEntry' => 'OBJID' }
     end
 
-    xdescribe 'class methods' do
+    describe 'class methods' do
       context '#read_data' do
         it 'reads the data from an xml file' do
-          expect(described_class.read_data(path)).to be_a(Nokogiri::XML::Element)
+          expect(data).to be_a(Nokogiri::XML::Document)
         end
       end
 
@@ -22,7 +22,7 @@ module Bulkrax
         it 'retrieves the data and constructs a hash' do
           expect(described_class.data_for_entry(data)).to eq(
             source_identifier: 'http://purl.dlib.indiana.edu/iudl/archives/VAC1741-00310',
-            data: data,
+            data: open(path).read,
             collection: [],
             children: []
           )

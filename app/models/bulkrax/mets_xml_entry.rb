@@ -18,15 +18,15 @@ module Bulkrax
       collections = []
       children = []
       
-      source_identifier = data.attributes[source_identifier_field].text
+      source_identifier = data.root.attributes[source_identifier_field].text
       return {
         source_identifier: source_identifier,
         data:
           data.to_xml(
-            encoding: 'UTF-8',
+            encoding: 'utf-8',
             save_with:
-              Nokogiri::XML::Node::SaveOptions::NO_DECLARATION | Nokogiri::XML::Node::SaveOptions::NO_EMPTY_TAGS
-          ).delete("\n").delete("\t").squeeze(' '), # Remove newlines, tabs, and extra whitespace
+                Nokogiri::XML::Node::SaveOptions::DEFAULT_XML
+          ),
         collection: collections,
         children: children
       }
