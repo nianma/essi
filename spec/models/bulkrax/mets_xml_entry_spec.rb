@@ -20,7 +20,7 @@ module Bulkrax
 
       context '#data_for_entry' do
         it 'retrieves the data and constructs a hash' do
-          expect(described_class.data_for_entry(data)).to eq(
+          expect(described_class.data_for_entry(data.root)).to eq(
             source_identifier: 'http://purl.dlib.indiana.edu/iudl/archives/VAC1741-00310',
             data: open(path).read,
             collection: [],

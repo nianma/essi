@@ -8,21 +8,26 @@ module Bulkrax
 
     def self.fields_from_data(data); end
 
+
+    # @param [String] path
+    # @return [Nokogiri::XML::Document]
     def self.read_data(path)
       # This doesn't cope with BOM sequences:
       # Nokogiri::XML(open(path), nil, 'UTF-8').remove_namespaces!
       Nokogiri::XML(open(path))
     end
-
+    
+    
+    # @param [Nokogiri::XML::Element] data
     def self.data_for_entry(data)
       collections = []
       children = []
       
-      source_identifier = data.root.attributes[source_identifier_field].text
+      source_identifier = data.attributes[source_identifier_field].text
       return {
         source_identifier: source_identifier,
         data:
-          data.to_xml(
+          data.document.to_xml(
             encoding: 'utf-8',
             save_with:
                 Nokogiri::XML::Node::SaveOptions::DEFAULT_XML
