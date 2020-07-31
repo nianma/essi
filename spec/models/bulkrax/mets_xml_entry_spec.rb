@@ -30,9 +30,9 @@ module Bulkrax
       end
     end
 
-    xdescribe '#build' do
+    describe '#build' do
       subject(:xml_entry) { described_class.new(importerexporter: importer) }
-      let(:raw_metadata) { described_class.data_for_entry(data) }
+      let(:raw_metadata) { described_class.data_for_entry(data.root) }
       let(:importer) { FactoryBot.build(:bulkrax_importer_mets_xml) }
       let(:object_factory) { instance_double(ObjectFactory) }
 
