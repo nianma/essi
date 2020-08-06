@@ -63,12 +63,12 @@ module Bulkrax
       self.parsed_metadata['structure'] = record.structure #add_logical_structure
       add_collections
       add_local
-      raise StandardError, "title is required" if self.parsed_metadata['title'].blank?
+      raise StandardError, "title is required" if self.parsed_metadata['title'].join.blank?
       self.parsed_metadata
     end
 
     def add_title
-      self.parsed_metadata['title'] = [parser.parser_fields['title']] || [record.record_id]
+      self.parsed_metadata['title'] = [parser.parser_fields['title'] || record.identifier]
     end
   end
 end
