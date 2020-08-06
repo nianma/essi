@@ -108,7 +108,7 @@ class METSDocument
       #return unless url.present?
 
       fl = if url.present?
-             FinalRedirectUrl.final_redirect_url(url)
+             IuMetadata::FinalRedirectUrl.final_redirect_url(url)
            end
 
       fl.present? ? fl : url
