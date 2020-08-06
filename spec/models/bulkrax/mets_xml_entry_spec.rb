@@ -54,20 +54,28 @@ module Bulkrax
           allow(ObjectFactory).to receive(:new).and_return(object_factory)
           allow(object_factory).to receive(:run!).and_return(instance_of(PagedResource))
           allow(User).to receive(:batch_user)
+          VCR.use_cassette('mets_xml_entry_spec') do
+            xml_entry.build
+          end
         end
 
         it 'succeeds' do
-          xml_entry.build
           expect(xml_entry.status).to eq('succeeded')
         end
 
         it 'builds entry' do
-          xml_entry.build
-          expect(xml_entry.parsed_metadata).to eq("file" => nil, "rights_statement" => [nil], "source" => ["3456012"], "title" => ["Single XML Entry"], "visibility" => "open")
+          expect(xml_entry.parsed_metadata).to include('admin_set_id' => 'MyString',
+                                                       'rights_statement' => [nil],
+                                                       'source' => ["http://purl.dlib.indiana.edu/iudl/archives/VAC1741-00310"],
+                                                       'title' => ["http://purl.dlib.indiana.edu/iudl/archives/VAC1741-00310"],
+                                                       'viewing_direction' => 'left-to-right',
+                                                       'visibility' => 'open',
+                                                       'work_type' => ['PagedResource'])
+          expect(xml_entry.parsed_metadata).to include('remote_files' => a_collection_starting_with(a_hash_including('file_name' => 'VAC1741-U-00064-001-thumbnail')),
+                                                       'structure' => a_hash_including("nodes"))
         end
 
         it 'does not add unsupported fields' do
-          xml_entry.build
           expect(xml_entry.parsed_metadata).not_to include('abstract')
           expect(xml_entry.parsed_metadata).not_to include('Lorem ipsum dolor sit amet.')
         end
