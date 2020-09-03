@@ -483,6 +483,8 @@
     "@id": mrel:pbd
   puppeteer:
     "@id": mrel:ppt
+  purl:
+    "@id": dcterms:identifier
   radio_director:
     "@id": mrel:rdd
   radio_producer:
@@ -613,6 +615,8 @@
     "@id": pulterms:call_number
   published:
     "@id": pulterms:published
+  related_url:
+    "@id": rdfs:seeAlso
   source_metadata:
     "@id": pulterms:source_metadata
   source_metadata_identifier:
