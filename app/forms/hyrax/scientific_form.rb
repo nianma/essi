@@ -10,5 +10,6 @@ module Hyrax
     include ESSI::ScientificFormBehavior
     include ESSI::OCRTerms
     include AllinsonFlex::DynamicFormBehavior
+    include ESSI::PurlTerms
   end
 end
