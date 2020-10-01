@@ -46,3 +46,12 @@ Hydra::Derivatives.kdu_compress_path = ESSI.config.dig(:essi, :kdu_compress_path
 Hydra::Derivatives.kdu_compress_recipes =
   Hydra::Derivatives.kdu_compress_recipes.with_indifferent_access
                     .merge(ESSI.config.dig(:essi, :jp2_recipes) || {})
+
+# ocr derivation
+Hyrax::DerivativeService.services.unshift ESSI::FileSetOCRDerivativesService
+
+# add customized terms, currently just campus, to collection forms
+Hyrax::Forms::CollectionForm.include Extensions::Hyrax::Forms::CollectionForm::CustomizedTerms
+Hyrax::CollectionPresenter.include Extensions::Hyrax::CollectionPresenter::CustomizedTerms
+AdminSet.include Extensions::Hyrax::AdminSet::CampusOnAdminSet
+Hyrax::Forms::AdminSetForm.include Extensions::Hyrax::Forms::AdminSetForm::CustomizedTerms
