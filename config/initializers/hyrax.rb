@@ -197,7 +197,7 @@ Hyrax.config do |config|
   # config.audit_user_key = 'audituser@example.com'
   #
   # The banner image. Should be 5000px wide by 1000px tall
-  # config.banner_image = 'https://cloud.githubusercontent.com/assets/92044/18370978/88ecac20-75f6-11e6-8399-6536640ef695.jpg'
+  config.banner_image = ESSI.config.dig(:essi, :homepage_banner) || 'images/homepage_banner.png'
 
   # Temporary paths to hold uploads before they are ingested into FCrepo
   # These must be lambdas that return a Pathname. Can be configured separately
@@ -299,6 +299,10 @@ Hyrax.config do |config|
   #
   config.whitelisted_ingest_dirs ||= []
   config.whitelisted_ingest_dirs << Rails.root.join('spec', 'fixtures').to_s
+  [ESSI.config.dig(:essi, :whitelisted_ingest_dirs) || [], 
+   ENV['WHITELISTED_INGEST_DIRS'].to_s.split].select(&:any?).each do |additional_dirs|
+    config.whitelisted_ingest_dirs += additional_dirs
+  end
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
